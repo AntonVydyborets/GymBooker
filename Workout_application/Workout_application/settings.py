@@ -32,6 +32,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #my_apps
     "registration",
+    "workout_zones",
+    "trainers",
+    "reserve_pers_training",
+    "review",
 ]
 
 MIDDLEWARE = [
