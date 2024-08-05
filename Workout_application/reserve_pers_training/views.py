@@ -30,14 +30,12 @@ class CreateReservationView(LoginRequiredMixin, CreateView):
         start_time = form.cleaned_data["start_time"]
         end_time = form.cleaned_data["end_time"]
 
+        
         if not Schedule.objects.filter(
             trainer=trainer, date=date, is_working_day=True
         ).exists():
-            messages.error(
-                self.request,
-                "The trainer is not available on this day. Please choose another date.",
-            )
-            return redirect("create_reservation", trainer_id=trainer.id)
+            form.add_error(None, 'The trainer is not available on this day. Please choose another date.')
+            return self.form_invalid(form)
 
         reservations = Reserve.objects.filter(
             trainer=trainer, date=date, start_time__lt=end_time, end_time__gt=start_time

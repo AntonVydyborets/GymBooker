@@ -2,6 +2,8 @@
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+import sys
+from django.core.exceptions import ImproperlyConfigured
 
 load_dotenv()
 
@@ -82,6 +84,15 @@ DATABASES = {
         "PORT": os.environ.get("DATABASE_PORT"),
     }
 }
+
+if not DATABASES['default']['NAME']:
+    raise ImproperlyConfigured("Database name is not set in environment variables")
+
+if 'test' in sys.argv or 'pytest' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:',
+    }
 
 
 # Password validation
